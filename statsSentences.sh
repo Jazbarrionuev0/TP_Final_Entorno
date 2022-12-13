@@ -1,30 +1,35 @@
 #!/usr/bin/bash
 
-texto=( cat $1 | tr "." "\n" | tr "!" "\n" | tr "?" "\n" | sed '/^$/d')
+file=$(cat $1)
 
-oracionlarga=0
-oracioncorta=10000
-cantidadoraciones=0
-cantidadpalabras=0
+cantidaddeoraciones=`echo $file | tr -cd "\." | wc -c`
+OIFS=$IFS
+IFS='.'
+letrasoracionlarga=0
+letrasoracioncorta=1000
 
-for palabra in $texto
+
+for oracion in $file
 do
-	cantidadpalabras=$(($cantidadpalabras + 1))
-
+  if [[ ${#oracion} -gt $letrasoracionlarga ]]
+  then
+    letrasoracionlarga=${#oracion}
+  fi
+  if [[ ${#oracion} -lt $letrasoracioncorta ]]
+  then
+    letrasoracioncorta=${#oracion}
+  fi
+  promedio=$(($promedio + ${#oracion}))
 done
 
+promedio=$(($promedio/$cantidaddeoraciones))
 
-for oracion in $arrayoraciones
-do
-  if [ ${#oracion} -gt $oracionlarga ]
-  then
-    oracionlarga=${#oracion}
-  fi
-  if [ ${#oracion} -lt $oracioncorta ]
-  then
-    oracioncorta=${#oracion}
-  fi
-done
+echo "La oración más larga: "$letrasoracionlarga "letras."
+echo "La oración más corta: "$letrasoracioncorta "letras."
+echo "Ell promedio de las oraciones es de "$promedio "letras."
 
+IFS=$OIFS
+unset OIFS
 
-promedio=$(( $cantidadpalabras / $cantidadoraciones ))
+exit 0
+
