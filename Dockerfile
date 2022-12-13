@@ -10,3 +10,4 @@ ADD ["statsSentences.sh", "/statsSentences.sh"]
 ADD ["blankLinesCounter.sh", "/blankLinesCounter.sh"]
 
 ENTRYPOINT ["./menu.sh", "./texto.txt"]
+
